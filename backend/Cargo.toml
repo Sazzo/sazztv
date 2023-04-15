@@ -1,0 +1,19 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = { version = "^0.5.0-rc.3", features = ["json"] }
+prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.7", default-features = false, features = ["postgresql"] }
+serde = "1.0.159"
+chrono = "0.4.24"
+jsonwebtoken = "8"
+dotenv = "0.15.0"
+rocket_cors = "0.6.0-alpha2"
+
+[workspace]
+resolver = "2"
+members = [".", "cli"]
