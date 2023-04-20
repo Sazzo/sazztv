@@ -20,7 +20,7 @@ func getUser(c echo.Context) error {
 
 	err := db.Model(&model.User{}).Where("username = ?", username).Select("id", "username", "is_live", "last_stream_at", "created_at", "updated_at").First(&user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return c.JSON(http.StatusNotFound, &util.Error{
+		return c.JSON(http.StatusNotFound, &util.APIError{
 			Message: "User not found",
 		})
 	}

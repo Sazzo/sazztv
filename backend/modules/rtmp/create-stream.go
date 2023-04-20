@@ -22,7 +22,7 @@ func createStream(c echo.Context) error {
 
 	err := db.Model(&model.User{}).Where("stream_key = ?", streamKey).First(&user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return c.JSON(http.StatusBadRequest, &util.Error{
+		return c.JSON(http.StatusBadRequest, &util.APIError{
 			Message: "Invalid stream key",
 		})
 	}

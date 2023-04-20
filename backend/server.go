@@ -8,6 +8,7 @@ import (
 	"github.com/sazzo/sazztv/backend/modules/auth"
 	"github.com/sazzo/sazztv/backend/modules/rtmp"
 	"github.com/sazzo/sazztv/backend/modules/users"
+	"github.com/sazzo/sazztv/backend/util"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
@@ -15,17 +16,38 @@ import (
 )
 
 type CustomValidator struct {
-	  validator *validator.Validate
+	validator *validator.Validate
+}
+
+func getErrorMessageForTag(fieldError validator.FieldError) string {
+	switch fieldError.Tag() {
+	case "required":
+		return "Field is required"
+	case "email":
+		return "Field must be a valid email address"
+	default:
+		return fieldError.Error()
+	}
 }
 
 func (cv *CustomValidator) Validate(i interface{}) error {
-  if err := cv.validator.Struct(i); err != nil {
-    // Optionally, you could return the error to give each route more control over the status code
-	validationErrors := err.(validator.ValidationErrors)
-	println(validationErrors.Error())
-    return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-  }
-  return nil
+	if err := cv.validator.Struct(i); err != nil {
+		validationErrors := err.(validator.ValidationErrors)
+
+		clientValidationErrors := make([]util.ValidationError, len(validationErrors))
+		for i, validationError := range validationErrors {
+			clientValidationErrors[i] = util.ValidationError{
+				Field:   validationError.Field(),
+				Message: getErrorMessageForTag(validationError),
+			}
+		}
+
+		return echo.NewHTTPError(http.StatusBadRequest, &util.ValidationErrors{
+			Message: "Validation Error",
+			Errors:  clientValidationErrors,
+		})
+	}
+	return nil
 }
 
 func main() {

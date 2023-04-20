@@ -17,8 +17,8 @@ type LoginDTO struct {
 func login(c echo.Context) (err error) {
 	userCredentials := new(LoginDTO)
 	if err = c.Bind(userCredentials); err != nil {
-		return c.JSON(http.StatusBadRequest, &util.Error{
-			Message: "Invalid user credentials",
+		return c.JSON(http.StatusBadRequest, &util.APIError{
+			Message: "Invalid request body",
 		})
 	}
 
