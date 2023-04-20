@@ -1,2 +1,0 @@
-[default.databases.sea_orm]
-url = "postgres://postgres:postgres@localhost:5432/sazztv_dev"
