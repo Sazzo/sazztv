@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/sazzo/sazztv/backend/database"
 	"github.com/sazzo/sazztv/backend/modules/auth"
@@ -52,9 +53,11 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if os.Getenv("ENV") != "production" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
 
 	database.CreateConnection()
