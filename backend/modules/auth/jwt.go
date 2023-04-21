@@ -3,6 +3,7 @@ package auth
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -19,6 +20,9 @@ func EncodeUserTokenJwt(id string, username string, isAdmin bool) (string, error
 		Id:       id,
 		Username: username,
 		IsAdmin:  isAdmin,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
+		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
