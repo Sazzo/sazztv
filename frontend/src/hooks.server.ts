@@ -26,6 +26,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 				event.locals.accessToken = undefined;
 				event.cookies.delete('accessToken');
 			}
+
+			throw error;
 		}
 	}
 
