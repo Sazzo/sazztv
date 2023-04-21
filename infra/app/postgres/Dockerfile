@@ -1,3 +1,3 @@
-FROM postgres:12-alpine
+FROM postgres:13-alpine
 
 COPY *.sh /docker-entrypoint-initdb.d/

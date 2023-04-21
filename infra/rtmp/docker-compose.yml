@@ -7,5 +7,10 @@ services:
       - "8787:8787"
     env_file:
       - ../.env.rtmp
+    restart: unless-stopped
+    depends_on:
+      - backend
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf.template
+      - type: bind
+        source: ../rtmp/nginx/nginx.conf
+        target: /etc/nginx/nginx.conf.template

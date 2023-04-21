@@ -5,8 +5,9 @@ services:
     image: ghcr.io/sazzo/sazztv-backend:latest
     ports:
       - "1323:1323"
+    restart: unless-stopped
     env_file:
-      - .env.backend
+      - ../.env.backend
     depends_on:
       - postgres
   postgres:
