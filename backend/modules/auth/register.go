@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/sazzo/sazztv/backend/database"
 	"github.com/sazzo/sazztv/backend/model"
@@ -49,7 +50,13 @@ func register(c echo.Context) (err error) {
 		user = model.User{
 			Username: userCredentials.Username,
 			Password: string(hashedPassword),
-			StreamKey: randstr.Hex(20),
+			StreamCredentials: model.StreamCredentials{
+				RTMPUrl: os.Getenv("RTMP_STREAM_URL"),
+				StreamKey: randstr.Hex(32),
+			},
+			StreamSettings: model.StreamSettings{
+				Title: "Untitled Stream",
+			},
 		}
 
 		createUserErr := db.Create(&user).Error

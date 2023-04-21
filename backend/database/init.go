@@ -22,6 +22,8 @@ func CreateConnection() {
 	db, err = gorm.Open(postgres.Open(databaseUrl), &gorm.Config{})
 	
 	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&model.StreamSettings{})
+	db.AutoMigrate(&model.StreamCredentials{})
 
 	if err != nil {
 		log.Fatal(err)

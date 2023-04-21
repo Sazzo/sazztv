@@ -9,7 +9,8 @@ type User struct {
 	Username 		string `json:"username"`
 	Password 		string `json:"password,omitempty"`
 	IsAdmin 		bool `json:"is_admin"`
-	StreamKey 		string `json:"stream_key,omitempty"`
+	StreamSettings 	StreamSettings `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"stream_settings,omitempty"`
+	StreamCredentials StreamCredentials `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"stream_credentials,omitempty"`
 	IsLive  		bool `json:"is_live"`
 	LastStreamAt 	time.Time `json:"last_stream_at"`
 	CreatedAt 		time.Time `json:"created_at"`
