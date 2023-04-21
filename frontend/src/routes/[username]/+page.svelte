@@ -81,7 +81,7 @@
 					<input
 						type="text"
 						class="bg-gray-100 w-96 rounded-lg p-3"
-						placeholder="Digite uma mensagem"
+						placeholder="Send a message"
 					/>
 				</div>
 			</div>
