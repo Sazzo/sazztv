@@ -31,6 +31,5 @@ func deleteStream(c echo.Context) error {
 	user.LastStreamAt = time.Now()
 	db.Save(&user)
 	
-	// Send a 303 redirect to the user username, so RTMP can transform the stream key into a username (so we can use it in the stream URL)
 	return c.NoContent(http.StatusOK)
 }
