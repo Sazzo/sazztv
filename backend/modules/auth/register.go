@@ -49,7 +49,7 @@ func register(c echo.Context) (err error) {
 		user = model.User{
 			Username: userCredentials.Username,
 			Password: string(hashedPassword),
-			StreamKey: randstr.Hex(16),
+			StreamKey: randstr.Hex(20),
 		}
 
 		createUserErr := db.Create(&user).Error
