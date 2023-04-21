@@ -13,6 +13,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type CustomValidator struct {
@@ -59,6 +60,8 @@ func main() {
 	database.CreateConnection()
 
 	e := echo.New()
+	e.Use(middleware.CORS())
+	
 	e.Validator = &CustomValidator{validator: validator.New()}
 
 	rtmp.CreateRoutes(e)
