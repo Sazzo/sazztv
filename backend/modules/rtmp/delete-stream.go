@@ -18,14 +18,17 @@ func deleteStream(c echo.Context) error {
 
 	db := database.GetConnection()
 
-	var user model.User
+	var streamCredentials model.StreamCredentials
 
-	err := db.Model(&model.User{}).Where("stream_key = ?", streamKey).First(&user).Error
+	err := db.Model(&model.StreamCredentials{}).Where("stream_key = ?", streamKey).First(&streamCredentials).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return c.JSON(http.StatusBadRequest, &util.APIError{
 			Message: "Invalid stream key",
 		})
 	}
+
+	var user model.User
+	db.Model(&model.User{}).Where("id = ?", streamCredentials.UserID).First(&user)
 
 	user.IsLive = false
 	user.LastStreamAt = time.Now()
