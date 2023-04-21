@@ -6,5 +6,5 @@ func CreateRoutes(e *echo.Echo) {
 	router := e.Group("/auth")
 
 	router.POST("/login", login)
-	// router.POST("/register", register)
+	router.POST("/register", register)
 }

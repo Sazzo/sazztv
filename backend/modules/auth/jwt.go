@@ -27,5 +27,6 @@ func EncodeUserTokenJwt(id string, username string, isAdmin bool) (string, error
 	if jwtSecret == "" {
 		log.Fatal("JWT_SECRET is not set")
 	}
-	return token.SignedString(jwtSecret)
+
+	return token.SignedString([]byte(jwtSecret))
 }
