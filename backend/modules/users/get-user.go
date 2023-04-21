@@ -16,9 +16,19 @@ func getUser(c echo.Context) error {
 	db := database.GetConnection()
 	username := c.Param("username")
 
-	var user model.User
+	user := new(struct {
+		ID string `json:"id"`
+		Username string `json:"username"`
+		StreamSettings model.StreamSettings `gorm:"foreignKey:UserID" json:"stream_settings"`
+		IsAdmin bool `json:"is_admin"`
+		IsLive bool `json:"is_live"`
+		LastStreamAt string `json:"last_stream_at"`
+		CreatedAt string `json:"created_at"`
+		UpdatedAt string `json:"updated_at"`
+	})
+	
 
-	err := db.Model(&model.User{}).Where("username = ?", username).Select("id", "username", "is_live", "last_stream_at", "created_at", "updated_at").First(&user).Error
+	err := db.Model(&model.User{}).Where("username = ?", username).Preload("StreamSettings").First(&user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return c.JSON(http.StatusNotFound, &util.APIError{
 			Message: "User not found",
