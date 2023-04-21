@@ -1,7 +1,9 @@
 <script>
-	import Logo from './Logo.svelte';
-	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { page } from '$app/stores';
+	import LoginModal from './modals/LoginModal.svelte';
+	import Logo from './Logo.svelte';
+
+	let showLoginModal = false;
 </script>
 
 <nav class="flex h-14 items-center bg-white border-b-2">
@@ -12,19 +14,19 @@
 	<div class="pl-5 font-medium">
 		<a href="/">Home</a>
 	</div>
-	<div class="ml-auto pr-4">
-		{#if !$page.data.session}
-			<button class="border-2 p-2 rounded-lg text-sm font-medium" on:click={() => signIn()}
-				>Login</button
+
+	{#if !$page.data.currentUser}
+		<div class="ml-auto pr-4">
+			<button
+				class="border-2 p-2 rounded-lg text-sm font-medium"
+				on:click={() => (showLoginModal = true)}>Log in</button
 			>
-		{:else}
-			<div class="flex flex-row items-center">
-				<img
-					src={$page.data.session.user?.image}
-					alt={`Avatar de ${$page.data.session.user?.name}`}
-					class="w-8 h-8 rounded-full"
-				/>
-			</div>
-		{/if}
-	</div>
+		</div>
+	{:else}
+		<div class="ml-auto pr-4">
+			<p>{$page.data.currentUser.username}</p>
+		</div>
+	{/if}
 </nav>
+
+<LoginModal bind:showLoginModal />

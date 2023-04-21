@@ -3,15 +3,15 @@
 	import type { PageData } from './$types';
 	import Hls from 'hls.js';
 	import { invalidateAll } from '$app/navigation';
+	import { env } from '$env/dynamic/public';
 
 	export let data: PageData;
 
 	let videoElement: HTMLVideoElement;
 	let hls: Hls;
 
-	if (data.user.stream) {
-		// todo: hardcoded streaming server url
-		const streamPlaybackUrl = `http://localhost/live/${data.user.username}/index.m3u8`;
+	if (data.user.is_live) {
+		const streamPlaybackUrl = `${env.PUBLIC_STREAMING_SERVER_VIDEO_URL}/${data.user.username}/index.m3u8`;
 
 		let noUpdateTimeout: number;
 
@@ -28,7 +28,7 @@
 				console.log('stream is waiting');
 				await invalidateAll(); // invalidate the user data to check if the stream is still online
 
-				if (data.user.stream) {
+				if (data.user.is_live) {
 					console.log("stream seems to be online, but it's missing updates");
 					noUpdateTimeout = setTimeout(async () => {
 						console.log('stream seems to ended (forcefully)');
@@ -45,11 +45,11 @@
 </script>
 
 <div class="h-screen bg-gray-100">
-	{#if !data.user.stream}
+	{#if !data.user.is_live}
 		<div class="flex flex-col h-full justify-center items-center">
 			<h1 class="text-2xl">{'):'}</h1>
-			<h2 class="text-xl">O usuário está offline/não está transmitindo!</h2>
-			<h3 class="text-lg">Última vez online: {data.user.last_stream_at}</h3>
+			<h2 class="text-xl">User is offline/not streaming.</h2>
+			<h3 class="text-lg">Last time online: {data.user.last_stream_at}</h3>
 		</div>
 	{:else}
 		<div class="flex flex-row h-full">
@@ -68,13 +68,13 @@
 						<h1 class="text-2xl font-bold">
 							{data.user.username} <span class="text-xs font-normal">({data.user.id})</span>
 						</h1>
-						<h2>Titulo (que ainda não foi implementado pois estou ficando maluco)</h2>
+						<h2>{data.user.stream_settings.title}</h2>
 					</div>
 				</div>
 			</div>
 
 			<div class="flex flex-col w-[400px] bg-white border-l-2">
-				<div class="p-3 text-center border-b-2">CHAT DA LIVE</div>
+				<div class="p-3 text-center border-b-2">STREAM CHAT</div>
 
 				<div class="h-full" />
 				<div class="pb-3 flex justify-center items-center">

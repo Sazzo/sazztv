@@ -1,10 +1,26 @@
-import { SvelteKitAuth } from '@auth/sveltekit';
-import Discord from '@auth/core/providers/discord';
-import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } from '$env/static/private';
-import type { Provider } from '@auth/core/providers';
+import { PUBLIC_API_URL } from '$env/static/public';
+import { FetchResultTypes, fetch } from '@sapphire/fetch';
+import type { Handle } from '@sveltejs/kit';
+import type { User } from './types/api/user';
 
-export const handle = SvelteKitAuth({
-	providers: [
-		Discord({ clientId: DISCORD_CLIENT_ID, clientSecret: DISCORD_CLIENT_SECRET })
-	] as Provider[]
-});
+export const handle: Handle = async ({ event, resolve }) => {
+	const accessToken = event.cookies.get('accessToken');
+
+	if (accessToken) {
+		event.locals.accessToken = accessToken;
+
+		const currentUser = await fetch<User>(
+			`${PUBLIC_API_URL}/users/@me`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`
+				}
+			},
+			FetchResultTypes.JSON
+		);
+
+		event.locals.currentUser = currentUser;
+	}
+
+	return await resolve(event);
+};

@@ -32,9 +32,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@auth/core": "^0.5.1",
-		"@auth/sveltekit": "^0.3.0",
 		"@fontsource/overpass": "^4.5.11",
+		"@sapphire/fetch": "^2.4.1",
 		"hls.js": "^1.4.0-beta.2"
 	}
 }

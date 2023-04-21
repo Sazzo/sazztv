@@ -1,13 +1,12 @@
-<script>
-	import { page } from '$app/stores';
-	import { signOut } from '@auth/sveltekit/client';
+<script lang="ts">
+	import type { PageData } from './$types';
 
-	console.log($page.data.session);
+	export let data: PageData;
 </script>
 
 <div class="flex h-screen flex-col justify-center items-center">
-	<h1>A pior plataforma de streaming do mundo.</h1>
-
-	<h2>Logado como: {$page.data.session?.user?.name}</h2>
-	<button class="border-2 p-2 rounded-lg font-medium" on:click={() => signOut()}>Logout</button>
+	<h1>The world worst streaming platform.</h1>
+	{#if data.currentUser}
+		<h1>Logged as: {data.currentUser.username} ({data.currentUser.id})</h1>
+	{/if}
 </div>

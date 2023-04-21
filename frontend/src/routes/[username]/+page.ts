@@ -1,19 +1,15 @@
-import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import type { User } from '../../types/api/user';
+import { fetch, FetchResultTypes } from '@sapphire/fetch';
 
-async function getUser(fetchData: typeof fetch, username: string): Promise<User> {
-	// todo: hardcoded api url
-	const res = await fetchData(`http://127.0.0.1:8000/users/${username}`);
-	if (res.ok) {
-		return await res.json();
-	}
+import { env } from '$env/dynamic/public';
 
-	throw error(res.status, res.statusText);
+async function getUser(username: string): Promise<User> {
+	return await fetch<User>(`${env.PUBLIC_API_URL}/users/${username}`, FetchResultTypes.JSON);
 }
 
-export const load = (async ({ fetch, params }) => {
+export const load = (async ({ params }) => {
 	return {
-		user: getUser(fetch, params.username)
+		user: getUser(params.username)
 	};
 }) satisfies PageLoad;

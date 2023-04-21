@@ -1,3 +1,4 @@
-export interface Stream {
+export interface StreamSettings {
 	id: string;
+	title: string;
 }
