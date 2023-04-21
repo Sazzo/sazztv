@@ -2,11 +2,10 @@ version: "3"
 services:
   rtmp:
     image: alfg/nginx-rtmp
-    network_mode: "host"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     ports:
       - "1935:1935"
-      - "8787:80"
+      - "8787:8787"
+    env_file:
+      - ../.env.rtmp
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf.template
