@@ -25,6 +25,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 			if (error instanceof QueryError && error.code === 401) {
 				event.locals.accessToken = undefined;
 				event.cookies.delete('accessToken');
+
+				return resolve(event);
 			}
 
 			throw error;
