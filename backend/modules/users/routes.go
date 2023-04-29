@@ -9,5 +9,8 @@ func CreateRoutes(e *echo.Echo) {
 	router := e.Group("/users")
 
 	router.GET("/:username", getUser)
-	router.GET("/@me", getCurrentUser, middleware.GetJWTMiddleware())
+
+	// Auth-required routes
+
+	router.GET("/@me", getCurrentUser, middleware.JWT())
 }

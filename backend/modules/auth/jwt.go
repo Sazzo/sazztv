@@ -34,3 +34,21 @@ func EncodeUserTokenJwt(id string, username string, isAdmin bool) (string, error
 
 	return token.SignedString([]byte(jwtSecret))
 }
+
+func DecodeUserTokenJwt(tokenString string) (*JWTClaims, error) {
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		log.Fatal("JWT_SECRET is not set")
+	}
+
+	token, err := jwt.ParseWithClaims(tokenString, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(jwtSecret), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	claims := token.Claims.(*JWTClaims)
+
+	return claims, nil
+}

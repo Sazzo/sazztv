@@ -4,10 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/sazzo/sazztv/backend/database"
 	"github.com/sazzo/sazztv/backend/model"
-	"github.com/sazzo/sazztv/backend/modules/auth"
 	"github.com/sazzo/sazztv/backend/util"
 
 	"github.com/labstack/echo/v4"
@@ -16,8 +14,7 @@ import (
 
 func getCurrentUser(c echo.Context) error {
 	db := database.GetConnection()
-	userToken := c.Get("user").(*jwt.Token)
-	userTokenClaims := userToken.Claims.(*auth.JWTClaims)
+	authUser := c.Get("user").(model.User)
 
 	user := new(struct {
 		ID string `json:"id"`
@@ -30,7 +27,7 @@ func getCurrentUser(c echo.Context) error {
 		UpdatedAt string `json:"updated_at"`
 	})
 
-	err := db.Model(&model.User{}).Where("id = ?", userTokenClaims.Id).Preload("StreamSettings").First(&user).Error
+	err := db.Model(&model.User{}).Where("id = ?", authUser.ID).Preload("StreamSettings").First(&user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return c.JSON(http.StatusNotFound, &util.APIError{
 			Message: "User not found",
