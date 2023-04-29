@@ -64,7 +64,7 @@ func main() {
 
 	e := echo.New()
 	e.Use(middleware.CORS())
-	
+
 	e.Validator = &CustomValidator{validator: validator.New()}
 
 	rtmp.CreateRoutes(e)

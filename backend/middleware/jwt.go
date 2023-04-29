@@ -43,6 +43,6 @@ func JWT() echo.MiddlewareFunc {
 
 			c.Set("user", user)
 			return next(c)
+		}
 	}
-}
 }
