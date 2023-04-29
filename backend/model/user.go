@@ -6,8 +6,8 @@ import (
 
 type User struct {	
 	ID 				string `gorm:"primaryKey;type:uuid;default:gen_random_uuid()" json:"id"`
-	Username 		string `json:"username"`
-	Password 		string `json:"password,omitempty"`
+	Username 		string `json:"username" gorm:"unique"`
+	Password 		string `json:"-"`
 	IsAdmin 		bool `json:"is_admin"`
 	StreamSettings 	StreamSettings `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"stream_settings,omitempty"`
 	StreamCredentials StreamCredentials `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"stream_credentials,omitempty"`
