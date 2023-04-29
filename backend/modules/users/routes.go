@@ -13,4 +13,7 @@ func CreateRoutes(e *echo.Echo) {
 	// Auth-required routes
 
 	router.GET("/@me", getCurrentUser, middleware.JWT())
+	router.GET("/@me/stream-credentials", getUserStreamCredentials, middleware.JWT())
+
+	router.PATCH("/@me/username", changeUsername, middleware.JWT())
 }
